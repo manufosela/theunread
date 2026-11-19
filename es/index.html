@@ -143,6 +143,15 @@
   .lang a { color: var(--muted); text-decoration: none; }
   .lang a:hover { color: var(--accent); }
   .lang [aria-current] { color: var(--fg); font-weight: 700; }
+  .sign { margin: 2.5rem 0 0; font-family: var(--sans); font-size: 0.95rem; }
+  .sign h3 { margin: 0 0 0.75rem; font-size: 1rem; }
+  .sign form { display: grid; gap: 0.75rem; }
+  .sign label { display: grid; gap: 0.25rem; color: var(--muted); }
+  .sign input { padding: 0.7rem 0.9rem; border: 1px solid var(--rule); border-radius: 0.5rem; background: transparent; color: var(--fg); font: inherit; }
+  .sign input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .sign button { justify-self: start; padding: 0.7rem 1.2rem; border: 1px solid var(--fg); border-radius: 999px; background: var(--fg); color: var(--bg); font: inherit; cursor: pointer; }
+  .sign button:hover { background: var(--accent); border-color: var(--accent); }
+  .sign small { color: var(--muted); }
 </style>
 </head>
 <body>
@@ -194,8 +203,19 @@
   <h2>En resumen</h2>
   <p class="closing">No pedimos confianza ciega en la IA ni desconfianza por sistema. Pedimos lo que siempre ha funcionado con cualquier equipo: una intención clara, controles que no dependan de la buena voluntad y alguien que responda del resultado. Lo demás lo puede hacer la máquina.</p>
 
+  <section class="sign" id="sign">
+    <h3>Fírmalo</h3>
+    <form action="https://github.com/manufosela/theunread/issues/new" method="get" target="_blank" rel="noopener">
+      <input type="hidden" name="template" value="sign.yml">
+      <label>Nombre <input name="signer_name" required maxlength="80" autocomplete="name"></label>
+      <label>Cargo o empresa (opcional) <input name="role" maxlength="80" autocomplete="organization-title"></label>
+      <label>Ciudad o país (opcional) <input name="city" maxlength="80" autocomplete="address-level2"></label>
+      <button type="submit">Firmar</button>
+      <small>Confirmarás en GitHub (hace falta una cuenta gratuita). Se abre automáticamente una pull request que te añade a la lista.</small>
+    </form>
+  </section>
   <div class="actions">
-    <a class="primary" href="https://github.com/manufosela/theunread/blob/main/SIGNATORIES.md">Firma el manifiesto</a>
+    <a class="primary" href="#sign">Firma el manifiesto</a>
     <a href="https://github.com/manufosela/theunread">Propón un cambio</a>
   </div>
 

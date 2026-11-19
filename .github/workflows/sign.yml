@@ -1,0 +1,55 @@
+name: Sign the manifesto
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  sign:
+    if: contains(github.event.issue.labels.*.name, 'signature')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Add signature line
+        id: sign
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: node .github/scripts/sign.mjs
+
+      - name: Open pull request
+        if: steps.sign.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_AUTHOR: ${{ github.event.issue.user.login }}
+        run: |
+          branch="signature/issue-${ISSUE_NUMBER}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add SIGNATORIES.md
+          git commit -m "Add signature from issue #${ISSUE_NUMBER}"
+          git push origin "$branch"
+          gh pr create \
+            --base "${{ github.event.repository.default_branch }}" \
+            --head "$branch" \
+            --title "Add signature (issue #${ISSUE_NUMBER})" \
+            --body "Signature submitted through the form on theunread.dev by @${ISSUE_AUTHOR}. Closes #${ISSUE_NUMBER}."
+          gh issue comment "$ISSUE_NUMBER" --body "Thanks! A pull request with your signature has been opened and will be merged after review."
+
+      - name: Explain skipped submission
+        if: steps.sign.outputs.changed == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          REASON: ${{ steps.sign.outputs.reason }}
+        run: |
+          if [ "$REASON" = "duplicate" ]; then msg="This name is already in SIGNATORIES.md. Thanks for signing!"; else msg="We could not read a valid name from this form."; fi
+          gh issue comment "$ISSUE_NUMBER" --body "$msg"
+          gh issue close "$ISSUE_NUMBER"

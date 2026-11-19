@@ -142,6 +142,15 @@
   .lang a { color: var(--muted); text-decoration: none; }
   .lang a:hover { color: var(--accent); }
   .lang [aria-current] { color: var(--fg); font-weight: 700; }
+  .sign { margin: 2.5rem 0 0; font-family: var(--sans); font-size: 0.95rem; }
+  .sign h3 { margin: 0 0 0.75rem; font-size: 1rem; }
+  .sign form { display: grid; gap: 0.75rem; }
+  .sign label { display: grid; gap: 0.25rem; color: var(--muted); }
+  .sign input { padding: 0.7rem 0.9rem; border: 1px solid var(--rule); border-radius: 0.5rem; background: transparent; color: var(--fg); font: inherit; }
+  .sign input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .sign button { justify-self: start; padding: 0.7rem 1.2rem; border: 1px solid var(--fg); border-radius: 999px; background: var(--fg); color: var(--bg); font: inherit; cursor: pointer; }
+  .sign button:hover { background: var(--accent); border-color: var(--accent); }
+  .sign small { color: var(--muted); }
 </style>
 </head>
 <body>
@@ -193,8 +202,19 @@
   <h2>In short</h2>
   <p class="closing">We don't ask for blind trust in AI, nor reflexive distrust. We ask for what has always worked with any team: clear intent, controls that don't depend on good will, and someone accountable for the result. The rest, the machine can do.</p>
 
+  <section class="sign" id="sign">
+    <h3>Sign it</h3>
+    <form action="https://github.com/manufosela/theunread/issues/new" method="get" target="_blank" rel="noopener">
+      <input type="hidden" name="template" value="sign.yml">
+      <label>Name <input name="signer_name" required maxlength="80" autocomplete="name"></label>
+      <label>Role or company (optional) <input name="role" maxlength="80" autocomplete="organization-title"></label>
+      <label>City or country (optional) <input name="city" maxlength="80" autocomplete="address-level2"></label>
+      <button type="submit">Sign</button>
+      <small>You will confirm on GitHub (a free account is needed). A pull request adding you to the list is opened automatically.</small>
+    </form>
+  </section>
   <div class="actions">
-    <a class="primary" href="https://github.com/manufosela/theunread/blob/main/SIGNATORIES.md">Sign the manifesto</a>
+    <a class="primary" href="#sign">Sign the manifesto</a>
     <a href="https://github.com/manufosela/theunread">Propose a change</a>
   </div>
 

@@ -8,7 +8,7 @@ Read it at **[theunread.dev](https://theunread.dev)**.
 
 ## Sign it
 
-Open a pull request adding your name to [SIGNATORIES.md](SIGNATORIES.md). One line, at the end of the list:
+Use the form at [theunread.dev](https://theunread.dev/#sign) (it opens a pull request for you), or open a pull request adding your name to [SIGNATORIES.md](SIGNATORIES.md). One line, at the end of the list:
 
 ```
 - Your Name, Role or Company (optional), City or Country (optional)

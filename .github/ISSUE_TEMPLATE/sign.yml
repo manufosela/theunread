@@ -1,0 +1,22 @@
+name: Sign the manifesto
+description: Add your name to SIGNATORIES.md. A pull request is opened for you automatically.
+title: "Sign the manifesto"
+labels: ["signature"]
+body:
+  - type: input
+    id: signer_name
+    attributes:
+      label: Name
+      description: How you want to appear in the list.
+    validations:
+      required: true
+  - type: input
+    id: role
+    attributes:
+      label: Role or company
+      description: Optional.
+  - type: input
+    id: city
+    attributes:
+      label: City or country
+      description: Optional.
