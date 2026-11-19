@@ -14,3 +14,4 @@ To sign, open a pull request adding one line at the end of the list:
 - Jorge del Casar, Head of Tech, Madrid
 - Miguel Catalan Bañuls, TRIBBU, Madrid
 - Aitor Martínez, Software engineer
+- Nacho Brito, Software Engineer, Spain
