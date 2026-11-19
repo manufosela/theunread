@@ -13,3 +13,4 @@ To sign, open a pull request adding one line at the end of the list:
 - Mánu Fosela, CTO & AI Strategy, Madrid
 - Jorge del Casar, Head of Tech, Madrid
 - Miguel Catalan Bañuls, TRIBBU, Madrid
+- Aitor Martínez, Software engineer
