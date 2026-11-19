@@ -143,7 +143,6 @@
   .lang a:hover { color: var(--accent); }
   .lang [aria-current] { color: var(--fg); font-weight: 700; }
   .sign { margin: 2.5rem 0 0; font-family: var(--sans); font-size: 0.95rem; }
-  .sign h3 { margin: 0 0 0.75rem; font-size: 1rem; }
   .sign form { display: grid; gap: 0.75rem; }
   .sign label { display: grid; gap: 0.25rem; color: var(--muted); }
   .sign input { padding: 0.7rem 0.9rem; border: 1px solid var(--rule); border-radius: 0.5rem; background: transparent; color: var(--fg); font: inherit; }
@@ -151,6 +150,12 @@
   .sign button { justify-self: start; padding: 0.7rem 1.2rem; border: 1px solid var(--fg); border-radius: 999px; background: var(--fg); color: var(--bg); font: inherit; cursor: pointer; }
   .sign button:hover { background: var(--accent); border-color: var(--accent); }
   .sign small { color: var(--muted); }
+  .sign input { font-size: 1rem; }
+  .sign .count { margin: 0 0 1rem; color: var(--muted); }
+  .sign .preview { margin: 0; padding: 0.7rem 0.9rem; border-left: 3px solid var(--accent); color: var(--fg); background: color-mix(in srgb, var(--rule) 35%, transparent); }
+  .sign .preview span { color: var(--muted); }
+  .sign .status { margin: 0; color: var(--fg); }
+  .sign [hidden] { display: none; }
 </style>
 </head>
 <body>
@@ -203,18 +208,20 @@
   <p class="closing">We don't ask for blind trust in AI, nor reflexive distrust. We ask for what has always worked with any team: clear intent, controls that don't depend on good will, and someone accountable for the result. The rest, the machine can do.</p>
 
   <section class="sign" id="sign">
-    <h3>Sign it</h3>
+    <h2>Sign the manifesto</h2>
+    <p class="count" hidden></p>
     <form action="https://github.com/manufosela/theunread/issues/new" method="get" target="_blank" rel="noopener">
       <input type="hidden" name="template" value="sign.yml">
-      <label>Name <input name="signer_name" required maxlength="80" autocomplete="name"></label>
-      <label>Role or company (optional) <input name="role" maxlength="80" autocomplete="organization-title"></label>
-      <label>City or country (optional) <input name="city" maxlength="80" autocomplete="address-level2"></label>
-      <button type="submit">Sign</button>
+      <label>Name <input name="signer_name" placeholder="Ada Lovelace" required maxlength="80" autocomplete="name"></label>
+      <label>Role or company (optional) <input name="role" placeholder="Mathematician" maxlength="80" autocomplete="organization-title"></label>
+      <label>City or country (optional) <input name="city" placeholder="London" maxlength="80" autocomplete="address-level2"></label>
+      <p class="preview" aria-live="polite" hidden></p>
+      <button type="submit">Sign the manifesto</button>
       <small>You will confirm on GitHub (a free account is needed). A pull request adding you to the list is opened automatically.</small>
+      <p class="status" role="status"></p>
     </form>
   </section>
   <div class="actions">
-    <a class="primary" href="#sign">Sign the manifesto</a>
     <a href="https://github.com/manufosela/theunread">Propose a change</a>
   </div>
 
@@ -222,5 +229,44 @@
     <p>Written by Mánu Fosela, November 2026. Open to the community on <a href="https://github.com/manufosela/theunread">GitHub</a>.</p>
   </footer>
 </main>
+<script>
+(() => {
+  const form = document.querySelector("#sign form");
+  if (!form) return;
+  const T = {count:"{n} people have signed so far.",prev:"In the list you will appear as:",done:"GitHub opened in a new tab. Submit the issue there and a pull request adding you will be opened for you.",bad:"Please enter a name with letters."};
+  const clean = (s) => s
+    .replace(/(https?:\/\/|www\.)\S*/gi, " ")
+    .replace(/@/g, " ")
+    .replace(/[\u0000-\u001f\u007f\u200b-\u200f\u202a-\u202e\u2066-\u2069]/g, " ")
+    .replace(/[<>\[\]()`|*_~#!\\,]/g, " ")
+    .replace(/\s+/g, " ").trim().slice(0, 80);
+  const [name, role, city] = ["signer_name", "role", "city"].map((n) => form.elements[n]);
+  const preview = form.querySelector(".preview");
+  const status = form.querySelector(".status");
+  const update = () => {
+    const parts = [name, role, city].map((i) => clean(i.value)).filter(Boolean);
+    const ok = !name.value.trim() || clean(name.value) !== "";
+    name.setCustomValidity(ok ? "" : T.bad);
+    preview.hidden = !clean(name.value);
+    preview.textContent = "";
+    if (!preview.hidden) {
+      const lead = document.createElement("span");
+      lead.textContent = T.prev + " ";
+      preview.append(lead, parts.join(", "));
+    }
+    status.textContent = "";
+  };
+  form.addEventListener("input", update);
+  form.addEventListener("submit", () => { status.textContent = T.done; });
+  fetch("https://raw.githubusercontent.com/manufosela/theunread/main/SIGNATORIES.md")
+    .then((r) => (r.ok ? r.text() : Promise.reject()))
+    .then((t) => {
+      const n = t.split("## List")[1]?.split("\n").filter((l) => l.startsWith("- ")).length;
+      const el = document.querySelector("#sign .count");
+      if (n) { el.textContent = T.count.replace("{n}", n); el.hidden = false; }
+    })
+    .catch(() => {});
+})();
+</script>
 </body>
 </html>
