@@ -15,3 +15,4 @@ To sign, open a pull request adding one line at the end of the list:
 - Miguel Catalan Bañuls, TRIBBU, Madrid
 - Aitor Martínez, Software engineer
 - Nacho Brito, Software Engineer, Spain
+- Toni Moreno, CTO, Barcelona
